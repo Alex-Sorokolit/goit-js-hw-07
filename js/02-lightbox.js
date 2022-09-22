@@ -27,21 +27,6 @@ function createGallery (items) {
 // console.log(galleryContainer);
 
 
-// Делегування подій, для однакогої дії однотипних елементів
-const container = document.querySelector('.gallery');
-container.addEventListener('click', onClick);
-
-// Відкриття модалки по натисненню на прев'ю
-function onClick(event) {
- event.preventDefault()
- // Перевірка чи ми клікнули в зображення
- if (event.target.nodeName !== 'IMG') {
-  return;
-};
-
-
-};
-
 // Запуск бібліотеки
 let lightbox = new SimpleLightbox('.gallery a', {
  captionsData: 'alt',

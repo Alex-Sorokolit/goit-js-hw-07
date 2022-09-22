@@ -32,7 +32,7 @@ console.log();
 
 
 
-// Делегування подій, для однакогої дії однотипних елементів
+// Делегування подій, для однакової дії однотипних елементів
 const container = document.querySelector('.gallery');
 container.addEventListener('click', onClick);
 
@@ -54,20 +54,42 @@ function onClick(event){
   
   
   // Генерування модалки
-  const instance = basicLightbox.create(`<img src="${event.target.dataset.source}" width="800" height="600">`)
+  const instance = basicLightbox.create(`<img src="${event.target.dataset.source}" width="800" height="600">`,
+// Опції лайтбокс
+// Чомусь одночасно обидві опції не хочуть працювати. Якщо включити onShow то тоді не відбувається onClose ні при кліку на модалку, ні при кліку поза модалку, ні при натисненні esc. 
+// Якщо виключити onShow і залишити тільки onClose то все працює нормально. Слухача подій ми вішаємо там де instance.show() а прибираємо коли onClose. 
+
+
+// додавання слухача подій (клавіатури) до показу модалки (не працює)
+// {onShow: instance => {
+//   console.log('add event listener');
+//   window.addEventListener('keydown', onKeyPress);
+// }
+// },
+
+// видалення слухача подій (клавіатури) перед закриттям модалки
+{onClose: instance => {
+  console.log('Видаляємо слухача подій функцією noClose перед закриттям модалки');
+  window.removeEventListener('keydown', onKeyPress)
+} 
+});
+
+
+
+// Відображаємо модалку
   instance.show()
   window.addEventListener('keydown', onKeyPress);
-  
-  
-  
-  
+  console.log('додаємо слухача подій');
+
+
+
   // Закриття модалки по ESCAPE та гортання зображеннь стрілками
   function onKeyPress(event) {
     console.log(event.code);
     if (event.code === 'Escape'){
       instance.close()
-      window.removeEventListener('keydown', onKeyPress)
-      console.log(event.code);
+      // тут вже не потрібно знімати слухача, ми його знімаємо на опції onClose
+      // window.removeEventListener('keydown', onKeyPress)
     };
 
     if (event.code === 'ArrowLeft') {
